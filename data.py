@@ -46,8 +46,8 @@ if __name__=='__main__':
     neg_path = './data/Negative'
     pos=generate_name(pos_path)
     neg=generate_name(neg_path)
-    p_train_name,p_val_name,p_test_name,_,_=slpit_dataset(pos, 8, 1, 1)
-    n_train_name, n_val_name, n_test_name, _, _ = slpit_dataset(neg, 8, 1, 1)
+    p_train_name,p_val_name,p_test_name,_,_=slpit_dataset(pos, 70, 20, 10)
+    n_train_name, n_val_name, n_test_name, _, _ = slpit_dataset(neg, 70, 20, 10)
     generate_txt("./data/train.txt",'Positive', p_train_name,1)
     generate_txt("./data/train.txt",'Negative', n_train_name, 0)
     generate_txt("./data/val.txt", 'Positive',p_val_name, 1)

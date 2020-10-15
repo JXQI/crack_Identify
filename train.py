@@ -11,9 +11,10 @@ from os.path import join
 import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 class Process:
-    def __init__(self,device,model,batch_size):
+    def __init__(self,device,model,batch_size,lr=0.1):
         self.device = device
         self.batch_size=batch_size
+        self.lr=lr
         Net=models_select(class_num=2,pretrained=True)
         self.model=model
         self.net=Net.net(self.model)
@@ -26,7 +27,7 @@ class Process:
         self.train_loader=DataLoader(dataset=train_set,batch_size=self.batch_size,shuffle=True,num_workers=0)
         self.val_loader = DataLoader(dataset=val_set, batch_size=self.batch_size, shuffle=True, num_workers=0)
         self.loss=nn.CrossEntropyLoss()
-        self.optim=optim.SGD(self.net.parameters(),lr=0.1,momentum=0.9,weight_decay=0.001)
+        self.optim=optim.SGD(self.net.parameters(),lr=self.lr,momentum=0.9,weight_decay=0.001)
         #存储结果最好的模型参数
         self.best_model = ''
     def train(self,epoch):
@@ -36,6 +37,7 @@ class Process:
         self.best_model=''
         for j in range(epoch):
             running_loss=0
+            #running_loss_arr=[]
             for i,data in enumerate(self.train_loader,0):
                 if i%100==99:
                     self.optim.zero_grad()
@@ -48,25 +50,29 @@ class Process:
                     running_loss+=loss
                     if i%100==99:
                         print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/100))
+                        #running_loss_arr.append(running_loss/100) #TODO:增加loss曲线的显示
                         running_loss=0
-            loss_temp,acc_temp=Accuracy(self.net,self.train_loader,self.loss,self.device)
+            loss_temp,acc_temp,running_loss_arr=Accuracy(self.net,self.train_loader,self.loss,self.device)
             loss_list.append(loss_temp)
             acc_list.append(acc_temp)
             print("%d epoch the loss is %f,the accuarcy is %f " %(j,loss_temp,acc_temp))
             #保存所有的model,并且挑出最好的
-            model_name=self.model+'_'+str(epoch)+str(int(acc_temp))+'.pth'
+            model_name=self.model+'_'+str(epoch)+'_'+str(int(acc_temp*100))+'.pth'
             path='./Weights'
             torch.save(self.net.state_dict(),join(path,model_name))
             if acc_temp>max_acc:
                 max_acc=acc_temp
-                self.best_model=model_name
-                torch.save(self.net.state_dict(), join(path, self.best_model))
+                self.best_model='best_'+model_name
+        torch.save(self.net.state_dict(), join(path, self.best_model))
         drawline(range(epoch),loss_list,"epoch","loss","the loss of train")
         drawline(range(epoch),acc_list, "epoch","accuarcy", "the accuracy of train")
+        drawline(range(len(running_loss_arr)), running_loss_arr, "i", "loss", "the train_loss of the pre data") #TODO:增加loss的显示
+        #plt.show()  #TODO:可以改造
 
     def validate(self):
         self.net.load_state_dict(torch.load(join('./Weights',self.best_model)))
-        val_loss,val_acc=Accuracy(self.net,self.val_loader,self.loss,self.device)
+        val_loss,val_acc,val_loss_arr=Accuracy(self.net,self.val_loader,self.loss,self.device)
+        drawline(range(len(val_loss_arr)), val_loss_arr, "i", "loss", "the val_loss of the pre data")  # TODO:增加loss的显示
         print("The loss is %f ,The accuarcy is %f"%(val_loss,val_acc))
 
 if __name__=="__main__":
