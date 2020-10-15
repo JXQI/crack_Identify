@@ -10,6 +10,9 @@ from until import Accuracy,drawline
 from os.path import join
 import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
+import operator
+from functools import reduce
+
 class Process:
     def __init__(self,device,model,batch_size,lr=0.1):
         self.device = device
@@ -35,9 +38,9 @@ class Process:
         acc_list=[]
         max_acc=0
         self.best_model=''
+        running_loss_arr = []
         for j in range(epoch):
             running_loss=0
-            #running_loss_arr=[]
             for i,data in enumerate(self.train_loader,0):
                 if i%100==99:
                     self.optim.zero_grad()
@@ -52,9 +55,11 @@ class Process:
                         print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/100))
                         #running_loss_arr.append(running_loss/100) #TODO:增加loss曲线的显示
                         running_loss=0
-            loss_temp,acc_temp,running_loss_arr=Accuracy(self.net,self.train_loader,self.loss,self.device)
+            loss_temp,acc_temp,loss_per=Accuracy(self.net,self.train_loader,self.loss,self.device)
             loss_list.append(loss_temp)
             acc_list.append(acc_temp)
+            running_loss_arr.append(loss_per)
+            running_loss_arr=reduce(operator.add, running_loss_arr)
             print("%d epoch the loss is %f,the accuarcy is %f " %(j,loss_temp,acc_temp))
             #保存所有的model,并且挑出最好的
             model_name=self.model+'_'+str(j)+'_'+str(int(acc_temp*100))+'.pth'
