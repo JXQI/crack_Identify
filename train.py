@@ -57,7 +57,7 @@ class Process:
             acc_list.append(acc_temp)
             print("%d epoch the loss is %f,the accuarcy is %f " %(j,loss_temp,acc_temp))
             #保存所有的model,并且挑出最好的
-            model_name=self.model+'_'+str(epoch)+'_'+str(int(acc_temp*100))+'.pth'
+            model_name=self.model+'_'+str(j)+'_'+str(int(acc_temp*100))+'.pth'
             path='./Weights'
             if not os.path.isdir(path):
                 os.mkdir(path)
