@@ -59,6 +59,8 @@ class Process:
             #保存所有的model,并且挑出最好的
             model_name=self.model+'_'+str(epoch)+'_'+str(int(acc_temp*100))+'.pth'
             path='./Weights'
+            if not os.path.isdir(path):
+                os.mkdir(path)
             torch.save(self.net.state_dict(),join(path,model_name))
             if acc_temp>max_acc:
                 max_acc=acc_temp
@@ -76,8 +78,11 @@ class Process:
         print("The loss is %f ,The accuarcy is %f"%(val_loss,val_acc))
 
 if __name__=="__main__":
-    device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    print(device)
-    pro=Process(device)
-    pro.train(epoch=2)
-    pro.validate()
+    # device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+    # print(device)
+    # pro=Process(device)
+    # pro.train(epoch=2)
+    # pro.validate()
+    path='./Weights'
+    if not os.path.isdir(path):
+        os.mkdir(path)
