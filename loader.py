@@ -24,10 +24,7 @@ class dataloader(Dataset):
         label=torch.tensor(int(self.label[item]))
         if self.transform:
             image=self.transform(image)
-        if self.data_set=='test':
-            return image
-        else:
-            return image,label
+        return image,label
 if __name__=='__main__':
     d=dataloader('./data',data_set='test')
     print(len(d))
