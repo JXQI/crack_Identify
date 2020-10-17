@@ -59,7 +59,6 @@ class Process:
             loss_list.append(loss_temp)
             acc_list.append(acc_temp)
             running_loss_arr.append(loss_per)
-            running_loss_arr=reduce(operator.add, running_loss_arr)
             print("%d epoch the loss is %f,the accuarcy is %f " %(j,loss_temp,acc_temp))
             #保存所有的model,并且挑出最好的
             model_name=self.model+'_'+str(j)+'_'+str(int(acc_temp*100))+'.pth'
@@ -73,6 +72,7 @@ class Process:
         torch.save(self.net.state_dict(), join(path, self.best_model))
         drawline(range(epoch),loss_list,"epoch","loss","the loss of train")
         drawline(range(epoch),acc_list, "epoch","accuarcy", "the accuracy of train")
+        running_loss_arr = reduce(operator.add, running_loss_arr)
         drawline(range(len(running_loss_arr)), running_loss_arr, "i", "loss", "the train_loss of the pre data") #TODO:增加loss的显示
         #plt.show()  #TODO:可以改造
 
