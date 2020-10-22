@@ -1,5 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
+import os
 # net:trained model
 # dataloader:dataloader class
 #loss_function: loss choose
@@ -26,6 +27,9 @@ def Accuracy(net,dataloader,loss_function,device):
         return loss_get/total,correct/total,loss
 
 def drawline(x,y,xlabel,ylabel,title):
+    path='./result'
+    if not os.path.isdir(path):
+        os.mkdir(path)
     plt.figure()
     plt.title(title)
     plt.xlabel(xlabel)
