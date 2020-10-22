@@ -78,8 +78,11 @@ class Process:
     def validate(self):
         self.net.load_state_dict(torch.load(join('./Weights',self.best_model)))
         val_loss,val_acc,val_loss_arr=Accuracy(self.net,self.val_loader,self.loss,self.device)
+        train_loss, train_acc, train_loss_arr = Accuracy(self.net, self.train_loader, self.loss, self.device)
         drawline(range(len(val_loss_arr)), val_loss_arr, "i", "loss", "the val_loss of the pre data")  # TODO:增加loss的显示
-        print("The loss is %f ,The accuarcy is %f"%(val_loss,val_acc))
+        drawline(range(len(train_loss_arr)), train_loss_arr, "i", "loss", "the train_best_loss of the pre data")  # TODO:增加loss的显示
+        print("The vol_loss is %f ,The accuarcy is %f"%(val_loss,val_acc))
+        print("The train_loss is %f ,The accuarcy is %f" % (train_loss, train_acc))
 
 if __name__=="__main__":
     # device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
