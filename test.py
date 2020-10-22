@@ -22,7 +22,7 @@ class Test:
         self.model=model
         Net = models_select(class_num=2, pretrained=True)
         self.net = Net.net(self.model)
-        #self.net.load_state_dict(torch.load(self.weight_path))
+        self.net.load_state_dict(torch.load(self.weight_path,map_location=torch.device('cpu')))
     def result(self):
         for image in os.listdir(self.image_path):
             img=Image.open(join(self.image_path,image))
@@ -40,5 +40,5 @@ if __name__=='__main__':
     #transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(),
     #                                     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
     transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
-    T=Test(model='ResNet50',transforms=transform)
+    T=Test(model='ResNet50',weight_path='./Weights/best_ResNet50_100_100.pth',transforms=transform)
     T.result()
