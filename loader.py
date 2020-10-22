@@ -24,6 +24,7 @@ class dataloader(Dataset):
         label=torch.tensor(int(self.label[item]))
         if self.transform:
             image=self.transform(image)
+        print(join(self.path,self.image[item]),label)
         return image,label
 if __name__=='__main__':
     d=dataloader('./data',data_set='test')
