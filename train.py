@@ -22,7 +22,8 @@ class Process:
         self.model=model
         self.net=Net.net(self.model)
         self.net=self.net.to(self.device)
-        self.transform=transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor(),transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
+        #self.transform=transforms.Compose([transforms.Resize((224,224)),transforms.ToTensor(),transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
+        self.transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
         train_set=dataloader(path='./data',transforms=self.transform,data_set='train')
         val_set = dataloader(path='./data', transforms=self.transform,data_set='val')
 
@@ -45,6 +46,7 @@ class Process:
             for i,data in enumerate(self.train_loader,0):
                 self.optim.zero_grad()
                 inputs,labels=data[0].to(self.device),data[1].to(self.device)
+                print(inputs)
                 output=self.net(inputs)
                 #print(output,labels)
                 loss=self.loss(output,labels)
