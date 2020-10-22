@@ -42,19 +42,18 @@ class Process:
         for j in range(epoch):
             running_loss=0
             for i,data in enumerate(self.train_loader,0):
+                self.optim.zero_grad()
+                inputs,labels=data[0].to(self.device),data[1].to(self.device)
+                output=self.net(inputs)
+                #print(output,labels)
+                loss=self.loss(output,labels)
+                loss.backward() #计算梯度，反向传播
+                self.optim.step()
+                running_loss+=loss
                 if i%100==99:
-                    self.optim.zero_grad()
-                    inputs,labels=data[0].to(self.device),data[1].to(self.device)
-                    output=self.net(inputs)
-                    #print(output,labels)
-                    loss=self.loss(output,labels)
-                    loss.backward() #计算梯度，反向传播
-                    self.optim.step()
-                    running_loss+=loss
-                    if i%100==99:
-                        print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/100))
-                        #running_loss_arr.append(running_loss/100) #TODO:增加loss曲线的显示
-                        running_loss=0
+                    print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/100))
+                    #running_loss_arr.append(running_loss/100) #TODO:增加loss曲线的显示
+                    running_loss=0
             loss_temp,acc_temp,loss_per=Accuracy(self.net,self.train_loader,self.loss,self.device)
             loss_list.append(loss_temp)
             acc_list.append(acc_temp)

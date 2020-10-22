@@ -12,18 +12,17 @@ def Accuracy(net,dataloader,loss_function,device):
     correct=0
     with torch.no_grad():
         for i,data in enumerate(dataloader,0):
-            if i%100==99:
-                inputs=data[0].to(device)
-                labels=data[1].to(device)
-                net=net.to(device)
-                outputs=net(inputs)
-                _,predicted=torch.max(outputs,1)
-                total+=labels.size(0)
-                correct+=(predicted==labels).sum().item()
-                #print(predicted,labels)
-                temp=loss_function(outputs,labels)
-                loss.append(temp)
-                loss_get+=temp
+            inputs=data[0].to(device)
+            labels=data[1].to(device)
+            net=net.to(device)
+            outputs=net(inputs)
+            _,predicted=torch.max(outputs,1)
+            total+=labels.size(0)
+            correct+=(predicted==labels).sum().item()
+            #print(predicted,labels)
+            temp=loss_function(outputs,labels)
+            loss.append(temp)
+            loss_get+=temp
         return loss_get/total,correct/total,loss
 
 def drawline(x,y,xlabel,ylabel,title):
