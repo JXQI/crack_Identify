@@ -53,8 +53,8 @@ class Process:
                 loss.backward() #计算梯度，反向传播
                 self.optim.step()
                 running_loss+=loss
-                if i%100==99:
-                    print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/100))
+                if i%10==9:
+                    print("[%d, %d] loss:%f"%(j+1,i+1,running_loss/10))
                     #running_loss_arr.append(running_loss/100) #TODO:增加loss曲线的显示
                     running_loss=0
             loss_temp,acc_temp,loss_per=Accuracy(self.net,self.train_loader,self.loss,self.device)
