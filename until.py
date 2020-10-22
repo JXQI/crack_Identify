@@ -10,6 +10,7 @@ def Accuracy(net,dataloader,loss_function,device):
     loss=[]
     total=0
     correct=0
+    net.eval()
     with torch.no_grad():
         for i,data in enumerate(dataloader,0):
             inputs=data[0].to(device)

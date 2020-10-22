@@ -41,6 +41,7 @@ class Process:
         running_loss_arr = []
         for j in range(epoch):
             running_loss=0
+            self.net.train()
             for i,data in enumerate(self.train_loader,0):
                 self.optim.zero_grad()
                 inputs,labels=data[0].to(self.device),data[1].to(self.device)
