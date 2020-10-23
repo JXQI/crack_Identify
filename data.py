@@ -53,7 +53,7 @@ if __name__=='__main__':
     generate_txt("./data/val.txt", 'Positive',p_val_name, 1)
     generate_txt("./data/val.txt", 'Negative',n_val_name, 0)
     generate_txt("./data/test.txt",'Positive', p_test_name, 1)
-    generate_txt("./data/val.txt", 'Negative',n_test_name, 0)
+    generate_txt("./data/test.txt", 'Negative',n_test_name, 0)
 
     print("create the dateset finished! train:%d,val:%d,test:%d"\
           %(len(p_train_name+n_train_name),len(p_val_name+n_val_name),len(p_test_name+n_test_name)))
