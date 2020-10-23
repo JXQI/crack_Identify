@@ -7,6 +7,7 @@ from PIL import Image
 from os.path import join
 from torchvision import transforms
 import torchvision
+import torch.nn.functional as F
 
 def imgshow(img):
     img=img/2+0.5
@@ -20,15 +21,18 @@ class Test:
         self.image_path=image_path
         self.transforms=transforms
         self.model=model
-        Net = models_select(class_num=2, pretrained=True)
+        Net = models_select(class_num=2)
         self.net = Net.net(self.model)
-        self.net.load_state_dict(torch.load(self.weight_path,map_location=torch.device('cpu')))
+        self.net.load_state_dict(torch.load(self.weight_path))
+        self.net.eval()
+        #print(self.net)
     def result(self):
         for image in os.listdir(self.image_path):
             img=Image.open(join(self.image_path,image))
             img=self.transforms(img)
-            imgshow(img)
+            #imgshow(img)
             img = img.unsqueeze(0)
+            #print(img.size())
             output=self.net(img)
             print(output)
             _, predicted = torch.max(output, 1)
@@ -40,5 +44,5 @@ if __name__=='__main__':
     #transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor(),
     #                                     transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))])
     transform = transforms.Compose([transforms.Resize((224, 224)), transforms.ToTensor()])
-    T=Test(model='ResNet50',weight_path='./Weights/best_ResNet50_100_100.pth',transforms=transform)
+    T=Test(model='ResNet50',weight_path='./Weights/best_ResNet50_1_99.pth',transforms=transform)
     T.result()
