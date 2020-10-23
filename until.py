@@ -18,6 +18,7 @@ def Accuracy(net,dataloader,loss_function,device):
             net=net.to(device)
             outputs=net(inputs)
             _,predicted=torch.max(outputs,1)
+            print(outputs, predicted,labels)
             total+=labels.size(0)
             correct+=(predicted==labels).sum().item()
             #print(predicted,labels)
