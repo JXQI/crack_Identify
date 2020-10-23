@@ -61,7 +61,7 @@ class Process:
             loss_list.append(loss_temp)
             acc_list.append(acc_temp)
             running_loss_arr.append(loss_per)
-            print("%d epoch the loss is %f,the accuarcy is %f " %(j,loss_temp,acc_temp))
+            print("%d epoch the loss is %f,the accuarcy is %f " %(j+1,loss_temp,acc_temp))
             #保存所有的model,并且挑出最好的
             model_name=self.model+'_'+str(j)+'_'+str(int(acc_temp*100))+'.pth'
             path='./Weights'
