@@ -81,6 +81,7 @@ class Process:
     def validate(self):
         self.net.load_state_dict(torch.load(join('./Weights',self.best_model)))
         val_loss,val_acc,val_loss_arr=Accuracy(self.net,self.val_loader,self.loss,self.device)
+        print('train----')
         train_loss, train_acc, train_loss_arr = Accuracy(self.net, self.train_loader, self.loss, self.device)
         print("val-----")
         print(len(val_loss_arr),len(train_loss_arr))
