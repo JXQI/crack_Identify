@@ -39,7 +39,7 @@ def pets_classify():
     img = img.unsqueeze(0)
     output = net(img)
     _, pet_class = torch.max(output, 1)
-    pet_cls_prob=0 #TODO:
+    pet_cls_prob=1 #TODO:
     res = {
         'code': 0,
         'data': {
